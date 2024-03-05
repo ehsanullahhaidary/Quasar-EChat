@@ -35,62 +35,68 @@
     </div>
     <q-separator />
     <q-list separator>
-      <q-item
-        v-for="xchat in xchats"
-        :key="xchat.date"
-        class="xchat-tweet q-py-md"
+      <transition-group
+        appear
+        enter-active-class="animated fadeIn"
+        leave-active-class="animated fadeOut"
       >
-        <q-item-section top avatar>
-          <q-avatar size="xl">
-            <img
-              src="https://pbs.twimg.com/profile_images/1655602481970257920/VO1wJyaJ_400x400.jpg"
-            />
-          </q-avatar>
-        </q-item-section>
+        <q-item
+          v-for="xchat in xchats"
+          :key="xchat.date"
+          class="xchat-tweet q-py-md"
+        >
+          <q-item-section top avatar>
+            <q-avatar size="xl">
+              <img
+                src="https://pbs.twimg.com/profile_images/1655602481970257920/VO1wJyaJ_400x400.jpg"
+              />
+            </q-avatar>
+          </q-item-section>
 
-        <q-item-section>
-          <q-item-label class="text-weight-bold text-subtitle1"
-            >Ehsanullah Haidary
-            <span class="grey-7 text-body1">@Ehsan_Haidary</span>
-          </q-item-label>
-          <q-item-label class="xchat-content text-body1">
-            {{ xchat.content }}
-          </q-item-label>
-          <div class="xchat-icons row justify-between q-mt-sm">
-            <q-btn
-              flat
-              round
-              size="sm"
-              color="grey"
-              icon="fa-regular fa-comment"
-            />
-            <q-btn
-              flat
-              round
-              size="sm"
-              color="grey"
-              icon="fas fa-retweet"
-            /><q-btn
-              flat
-              round
-              size="sm"
-              color="grey"
-              icon="far fa-heart"
-            /><q-btn
-              @click="deleteXChat(xchat)"
-              flat
-              round
-              size="sm"
-              color="grey"
-              icon="fas fa-trash"
-            />
-          </div>
-        </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-weight-bold text-subtitle1"
+              >Ehsanullah Haidary
+              <span class="grey-7 text-body1">@Ehsan_Haidary</span>
+            </q-item-label>
+            <q-item-label class="xchat-content text-body1">
+              {{ xchat.content }}
+            </q-item-label>
+            <div class="xchat-icons row justify-between q-mt-sm">
+              <q-btn
+                flat
+                round
+                size="sm"
+                color="grey"
+                icon="fa-regular fa-comment"
+              />
+              <q-btn
+                flat
+                round
+                size="sm"
+                color="grey"
+                icon="fas fa-retweet"
+              /><q-btn
+                flat
+                round
+                size="sm"
+                color="grey"
+                icon="far fa-heart"
+              /><q-btn
+                @click="deleteXChat(xchat)"
+                flat
+                round
+                size="sm"
+                color="grey"
+                icon="fas fa-trash"
+              />
+            </div>
+          </q-item-section>
 
-        <q-item-section side top>
-          {{ relativeDate(xchat.date) }}
-        </q-item-section>
-      </q-item>
+          <q-item-section side top>
+            {{ relativeDate(xchat.date) }}
+          </q-item-section>
+        </q-item>
+      </transition-group>
     </q-list>
   </q-page>
 </template>
