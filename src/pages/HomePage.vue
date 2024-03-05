@@ -22,6 +22,7 @@
       </div>
       <div class="col col-shrink">
         <q-btn
+          @click="addNewXChat"
           :disable="newXChatContent"
           no-caps
           unelevated
@@ -122,6 +123,14 @@ export default defineComponent({
   methods: {
     relativeDate(value) {
       return formatDistance(value, new Date());
+    },
+    addNewXChat() {
+      const newXChat = {
+        content: this.newXChatContent,
+        date: Date.now(),
+      };
+      this.xchats.unshift(newXChat);
+      this.newXChatContent = "";
     },
   },
   computed: {},
