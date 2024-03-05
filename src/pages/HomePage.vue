@@ -76,7 +76,14 @@
               size="sm"
               color="grey"
               icon="far fa-heart"
-            /><q-btn flat round size="sm" color="grey" icon="fas fa-trash" />
+            /><q-btn
+              @click="deleteXChat(xchat)"
+              flat
+              round
+              size="sm"
+              color="grey"
+              icon="fas fa-trash"
+            />
           </div>
         </q-item-section>
 
@@ -132,7 +139,15 @@ export default defineComponent({
       this.xchats.unshift(newXChat);
       this.newXChatContent = "";
     },
+    deleteXChat(xchat) {
+      const dateToDelete = xchat.date;
+      const index = this.xchats.findIndex(
+        (xchat) => xchat.date === dateToDelete
+      );
+      this.xchats.splice(index, 1);
+    },
   },
+
   computed: {},
 });
 </script>
