@@ -1,103 +1,109 @@
 <template>
-  <q-page>
-    <div class="q-mx-md q-my-sm row items-end q-col-gutter-md">
-      <div class="col">
-        <q-input
-          bottom-slots
-          v-model="newXChatContent"
-          placeholder="What's happening?"
-          counter
-          maxlength="280"
-          autogrow
-          class="newXChatInput"
-        >
-          <template v-slot:before>
-            <q-avatar size="xl">
-              <img
-                src="https://pbs.twimg.com/profile_images/1655602481970257920/VO1wJyaJ_400x400.jpg"
-              />
-            </q-avatar>
-          </template>
-        </q-input>
+  <q-page class="relative-position">
+    <q-scroll-area class="absolute scroll__area">
+      <div class="q-mx-md q-my-sm row items-end q-col-gutter-md">
+        <div class="col">
+          <q-input
+            bottom-slots
+            v-model="newXChatContent"
+            placeholder="What's happening?"
+            counter
+            maxlength="280"
+            autogrow
+            class="newXChatInput"
+          >
+            <template v-slot:before>
+              <q-avatar size="xl">
+                <img
+                  src="https://pbs.twimg.com/profile_images/1655602481970257920/VO1wJyaJ_400x400.jpg"
+                />
+              </q-avatar>
+            </template>
+          </q-input>
+        </div>
+        <div class="col col-shrink">
+          <q-btn
+            @click="addNewXChat"
+            :disable="newXChatContent"
+            no-caps
+            unelevated
+            rounded
+            color="primary"
+            label="X Send"
+            class="q-mb-lg"
+          />
+        </div>
       </div>
-      <div class="col col-shrink">
-        <q-btn
-          @click="addNewXChat"
-          :disable="newXChatContent"
-          no-caps
-          unelevated
-          rounded
-          color="primary"
-          label="X Send"
-          class="q-mb-lg"
-        />
-      </div>
-    </div>
-    <q-separator />
-    <q-list separator>
-      <transition-group
-        appear
-        enter-active-class="animated fadeIn"
-        leave-active-class="animated fadeOut"
-      >
-        <q-item
-          v-for="xchat in xchats"
-          :key="xchat.date"
-          class="xchat-tweet q-py-md"
+      <q-separator />
+      <q-list separator>
+        <transition-group
+          appear
+          enter-active-class="animated fadeIn slow"
+          leave-active-class="animated fadeOut slow"
         >
-          <q-item-section top avatar>
-            <q-avatar size="xl">
-              <img
-                src="https://pbs.twimg.com/profile_images/1655602481970257920/VO1wJyaJ_400x400.jpg"
-              />
-            </q-avatar>
-          </q-item-section>
+          <q-item
+            v-for="xchat in xchats"
+            :key="xchat.date"
+            class="xchat-tweet q-py-md"
+          >
+            <q-item-section top avatar>
+              <q-avatar size="xl">
+                <img
+                  src="https://pbs.twimg.com/profile_images/1655602481970257920/VO1wJyaJ_400x400.jpg"
+                />
+              </q-avatar>
+            </q-item-section>
 
-          <q-item-section>
-            <q-item-label class="text-weight-bold text-subtitle1"
-              >Ehsanullah Haidary
-              <span class="grey-7 text-body1">@Ehsan_Haidary</span>
-            </q-item-label>
-            <q-item-label class="xchat-content text-body1">
-              {{ xchat.content }}
-            </q-item-label>
-            <div class="xchat-icons row justify-between q-mt-sm">
-              <q-btn
-                flat
-                round
-                size="sm"
-                color="grey"
-                icon="fa-regular fa-comment"
-              />
-              <q-btn
-                flat
-                round
-                size="sm"
-                color="grey"
-                icon="fas fa-retweet"
-              /><q-btn
-                flat
-                round
-                size="sm"
-                color="grey"
-                icon="far fa-heart"
-              /><q-btn
-                @click="deleteXChat(xchat)"
-                flat
-                round
-                size="sm"
-                color="grey"
-                icon="fas fa-trash"
-              />
-            </div>
-          </q-item-section>
+            <q-item-section>
+              <q-item-label class="text-weight-bold text-subtitle1"
+                >Ehsanullah Haidary
+                <span class="xchat-id-time text-body1"
+                  >@Ehsan_Haidary<br class="lt-md" /><span class="xchated-dote">
+                    · </span
+                  >{{ relativeDate(xchat.date) }}</span
+                >
+              </q-item-label>
+              <q-item-label class="xchat-content text-body1">
+                {{ xchat.content }}
+              </q-item-label>
+              <div class="xchat-icons row justify-between q-mt-sm">
+                <q-btn
+                  flat
+                  round
+                  size="sm"
+                  color="grey"
+                  icon="fa-regular fa-comment"
+                />
+                <q-btn
+                  flat
+                  round
+                  size="sm"
+                  color="grey"
+                  icon="fas fa-retweet"
+                /><q-btn
+                  flat
+                  round
+                  size="sm"
+                  color="grey"
+                  icon="far fa-heart"
+                /><q-btn
+                  @click="deleteXChat(xchat)"
+                  flat
+                  round
+                  size="sm"
+                  color="grey"
+                  icon="fas fa-trash"
+                />
+              </div>
+            </q-item-section>
 
-          <q-item-section side top>
+            <!-- <q-item-section side top>
             {{ relativeDate(xchat.date) }}
-          </q-item-section>
-        </q-item>
-      </transition-group>
-    </q-list>
+          </q-item-section> -->
+          </q-item>
+        </transition-group>
+      </q-list>
+    </q-scroll-area>
   </q-page>
 </template>
 
@@ -171,5 +177,17 @@ export default defineComponent({
 
 .xchat-icons {
   margin-left: -5px;
+}
+
+.xchat-id-time {
+  color: $grey-7;
+  font-weight: 400;
+}
+.xchated-dote {
+  font-weight: 900;
+}
+.scroll__area {
+  width: 100%;
+  height: 100%;
 }
 </style>
