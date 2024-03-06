@@ -108,8 +108,10 @@
 </template>
 
 <script>
-import { defineComponent, computed } from "vue";
+import { defineComponent } from "vue";
 import { formatDistance } from "date-fns";
+import db from "src/boot/firebase";
+// import { collection, query, where, onSnapshot } from "firebase/firestore";
 
 export default defineComponent({
   name: "HomePage",
@@ -117,25 +119,25 @@ export default defineComponent({
     return {
       newXChatContent: "",
       xchats: [
-        {
-          content:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique sunt dicta officia ab. Sint est in officia ipsa quam adipisci sit quia aperiam nesciunt atque, quas, provident vel doloribus voluptatibus.",
-          date: 1709636487161,
-        },
-        {
-          content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
-          date: 1709636529097,
-        },
-        {
-          content:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique sunt dicta officia ab. Sint est in officia ipsa quam adipisci sit quia aperiam.",
-          date: 1709636671480,
-        },
-        {
-          content:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique sunt dicta officia ab. Sint est in officia.",
-          date: 1709636678964,
-        },
+        // {
+        //   content:
+        //     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique sunt dicta officia ab. Sint est in officia ipsa quam adipisci sit quia aperiam nesciunt atque, quas, provident vel doloribus voluptatibus.",
+        //   date: 1709636487161,
+        // },
+        // {
+        //   content: "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+        //   date: 1709636529097,
+        // },
+        // {
+        //   content:
+        //     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique sunt dicta officia ab. Sint est in officia ipsa quam adipisci sit quia aperiam.",
+        //   date: 1709636671480,
+        // },
+        // {
+        //   content:
+        //     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique sunt dicta officia ab. Sint est in officia.",
+        //   date: 1709636678964,
+        // },
       ],
     };
   },
@@ -149,6 +151,7 @@ export default defineComponent({
         date: Date.now(),
       };
       this.xchats.unshift(newXChat);
+
       this.newXChatContent = "";
     },
     deleteXChat(xchat) {
@@ -159,8 +162,25 @@ export default defineComponent({
       this.xchats.splice(index, 1);
     },
   },
-
-  computed: {},
+  mounted() {
+    db.collection("xchat")
+      .orderBy("date")
+      .onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          const xchatChange = change.doc.data();
+          if (change.type === "added") {
+            console.log("New xchat: ", xchatChange);
+            this.xchats.unshift(xchatChange);
+          }
+          if (change.type === "modified") {
+            console.log("Modified xchat: ", xchatChange);
+          }
+          if (change.type === "removed") {
+            console.log("Removed xchat: ", xchatChange);
+          }
+        });
+      });
+  },
 });
 </script>
 
