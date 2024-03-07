@@ -164,11 +164,15 @@ export default defineComponent({
       this.newXChatContent = "";
     },
     deleteXChat(xchat) {
-      const dateToDelete = xchat.date;
-      const index = this.xchats.findIndex(
-        (xchat) => xchat.date === dateToDelete
-      );
-      this.xchats.splice(index, 1);
+      db.collection("xchat")
+        .doc(xchat.id)
+        .delete()
+        .then(() => {
+          console.log("Document successfully deleted!");
+        })
+        .catch((error) => {
+          console.error("Error removing document: ", error);
+        });
     },
   },
   mounted() {
