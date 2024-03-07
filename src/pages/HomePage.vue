@@ -43,7 +43,7 @@
         >
           <q-item
             v-for="xchat in xchats"
-            :key="xchat.date"
+            :key="xchat.id"
             class="xchat-tweet q-py-md"
           >
             <q-item-section top avatar>
@@ -150,7 +150,16 @@ export default defineComponent({
         content: this.newXChatContent,
         date: Date.now(),
       };
-      this.xchats.unshift(newXChat);
+      // this.xchats.unshift(newXChat);
+      // Add a new document with a generated id.
+      db.collection("xchat")
+        .add(newXChat)
+        .then((docRef) => {
+          console.log("Document written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+          console.error("Error adding document: ", error);
+        });
 
       this.newXChatContent = "";
     },
@@ -168,6 +177,7 @@ export default defineComponent({
       .onSnapshot((snapshot) => {
         snapshot.docChanges().forEach((change) => {
           const xchatChange = change.doc.data();
+          xchatChange.id = change.doc.id;
           if (change.type === "added") {
             console.log("New xchat: ", xchatChange);
             this.xchats.unshift(xchatChange);
@@ -177,6 +187,11 @@ export default defineComponent({
           }
           if (change.type === "removed") {
             console.log("Removed xchat: ", xchatChange);
+            const dateToDelete = xchatChange.id;
+            const index = this.xchats.findIndex(
+              (findxchat) => findxchat.id === dateToDelete
+            );
+            this.xchats.splice(index, 1);
           }
         });
       });
