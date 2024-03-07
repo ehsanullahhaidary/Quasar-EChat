@@ -81,11 +81,12 @@
                   color="grey"
                   icon="fas fa-retweet"
                 /><q-btn
+                  @click="likedChange(xchat)"
                   flat
                   round
                   size="sm"
-                  color="grey"
-                  icon="far fa-heart"
+                  :color="xchat.liked ? 'blue' : 'grey'"
+                  :icon="xchat.liked ? 'fas fa-heart' : 'far fa-heart'"
                 /><q-btn
                   @click="deleteXChat(xchat)"
                   flat
@@ -149,6 +150,7 @@ export default defineComponent({
       const newXChat = {
         content: this.newXChatContent,
         date: Date.now(),
+        liked: false,
       };
       // this.xchats.unshift(newXChat);
       // Add a new document with a generated id.
@@ -174,6 +176,22 @@ export default defineComponent({
           console.error("Error removing document: ", error);
         });
     },
+    likedChange(xchat) {
+      db.collection("xchat")
+        .doc(xchat.id)
+        .set(
+          {
+            liked: !xchat.liked,
+          },
+          { merge: true }
+        )
+        .then(() => {
+          console.log("Document successfully written!");
+        })
+        .catch((error) => {
+          console.error("Error writing document: ", error);
+        });
+    },
   },
   mounted() {
     db.collection("xchat")
@@ -188,6 +206,11 @@ export default defineComponent({
           }
           if (change.type === "modified") {
             console.log("Modified xchat: ", xchatChange);
+            const modifiedId = xchatChange.id;
+            const index = this.xchats.findIndex(
+              (findxchat) => findxchat.id === modifiedId
+            );
+            this.xchats[index].liked = xchatChange.liked;
           }
           if (change.type === "removed") {
             console.log("Removed xchat: ", xchatChange);
