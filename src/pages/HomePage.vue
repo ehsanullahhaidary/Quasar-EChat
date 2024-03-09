@@ -1,6 +1,6 @@
 <template>
   <q-page class="relative-position">
-    <q-scroll-area class="absolute full-width full-height">
+    <q-scroll-area class="absolute scroll__area">
       <div class="q-mx-md q-my-sm row items-end q-col-gutter-md">
         <div class="col">
           <q-input
@@ -35,35 +35,6 @@
         </div>
       </div>
       <q-separator />
-      <!-- <LabelBox
-        title="Money"
-        icon="payments"
-        newValue="7000000000$"
-        oldValue=""
-        color="red"
-      />
-      <LabelBox
-        title="Money"
-        icon="payments"
-        newValue="700000000$"
-        oldValue="234"
-        color="blue"
-      />
-      <LabelBox
-        title="Money"
-        icon="payments"
-        newValue="700000$"
-        oldValue="677777"
-        color="#88cff0"
-      />
-      <LabelBox
-        title="Money"
-        icon="payments"
-        newValue="700000$"
-        oldValue=""
-        color="#88cff0"
-      /> -->
-
       <q-list separator>
         <transition-group
           appear
